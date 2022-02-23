@@ -29,7 +29,6 @@ export SCRAM_ARCH=slc7_amd64_gcc10
 export CMS_PATH=/data/cmssw
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cmsrel <CMSSW_Version>
-
 ```
 
 Running tests: 
@@ -41,3 +40,12 @@ mkdir run
 cd run
 runTheMatrix.py -w upgrade -l 11634.514
 ```
+
+## Extra commands 
+
+To check the current machine users `w`. To get associated job IDs for your user sessions: `ps -fu <userName>`. Kill an old session with: 
+
+```
+kill -9 <jobID>
+```
+
