@@ -1,0 +1,315 @@
+{
+  "modules": [
+    {
+      "events": 25000,
+      "label": "source",
+      "mem_alloc": 76658587,
+      "mem_free": 38329879,
+      "time_real": 13597.129219,
+      "time_thread": 13561.28548,
+      "type": "FedRawDataInputSource"
+    },
+    {
+      "events": 25000,
+      "label": "TriggerResults",
+      "mem_alloc": 4882,
+      "mem_free": 781,
+      "time_real": 59.626025,
+      "time_thread": 60.980016,
+      "type": "TriggerResultInserter"
+    },
+    {
+      "events": 25000,
+      "label": "raw2digi_step",
+      "mem_alloc": 1953,
+      "mem_free": 781,
+      "time_real": 100.44938,
+      "time_thread": 103.017203,
+      "type": "PathStatusInserter"
+    },
+    {
+      "events": 25000,
+      "label": "reconstruction_step",
+      "mem_alloc": 1953,
+      "mem_free": 781,
+      "time_real": 41.303459,
+      "time_thread": 41.58697,
+      "type": "PathStatusInserter"
+    },
+    {
+      "events": 25000,
+      "label": "consume_step",
+      "mem_alloc": 1953,
+      "mem_free": 781,
+      "time_real": 65.536908,
+      "time_thread": 65.326512,
+      "type": "EndPathStatusInserter"
+    },
+    {
+      "events": 25000,
+      "label": "consumer",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 46.298418,
+      "time_thread": 48.161059,
+      "type": "GenericConsumer"
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 25000,
+      "label": "ecalDetIdToBeRecovered",
+      "mem_alloc": 30470,
+      "mem_free": 21095,
+      "time_real": 297.34731,
+      "time_thread": 296.564206,
+      "type": "EcalDetIdToBeRecoveredProducer"
+    },
+    {
+      "events": 0,
+      "label": "ecalDigis",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": "SwitchProducer"
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 25000,
+      "label": "ecalDigis@cuda",
+      "mem_alloc": 2799011,
+      "mem_free": 1381584,
+      "time_real": 3403.79448,
+      "time_thread": 3371.7453,
+      "type": "EcalCPUDigisProducer"
+    },
+    {
+      "events": 25000,
+      "label": "ecalDigisGPU",
+      "mem_alloc": 68804,
+      "mem_free": 40625,
+      "time_real": 2090.309816,
+      "time_thread": 2084.811642,
+      "type": "EcalRawToDigiGPU"
+    },
+    {
+      "events": 0,
+      "label": "ecalMultiFitUncalibRecHit",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": "SwitchProducer"
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 25000,
+      "label": "ecalMultiFitUncalibRecHit@cuda",
+      "mem_alloc": 8661174,
+      "mem_free": 4330197,
+      "time_real": 8537.763479,
+      "time_thread": 8514.541779,
+      "type": "EcalUncalibRecHitConvertGPU2CPUFormat"
+    },
+    {
+      "events": 25000,
+      "label": "ecalMultiFitUncalibRecHitGPU",
+      "mem_alloc": 162594,
+      "mem_free": 130472,
+      "time_real": 4845.833867,
+      "time_thread": 4304.356131,
+      "type": "EcalUncalibRecHitProducerGPU"
+    },
+    {
+      "events": 25000,
+      "label": "ecalMultiFitUncalibRecHitSoA",
+      "mem_alloc": 709038,
+      "mem_free": 107134,
+      "time_real": 4636.843523,
+      "time_thread": 4633.934239,
+      "type": "EcalCPUUncalibRecHitProducer"
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 0,
+      "label": "ecalRecHit",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": "SwitchProducer"
+    },
+    {
+      "events": 25000,
+      "label": "ecalRecHit@cpu",
+      "mem_alloc": 4183473,
+      "mem_free": 3051689,
+      "time_real": 25267.4191,
+      "time_thread": 25194.7534,
+      "type": "EcalRecHitProducer"
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 0,
+      "label": "",
+      "mem_alloc": 0,
+      "mem_free": 0,
+      "time_real": 0.0,
+      "time_thread": 0.0,
+      "type": ""
+    },
+    {
+      "events": 25000,
+      "label": "other",
+      "mem_alloc": 867839,
+      "mem_free": 46503065,
+      "time_real": 209867.111744,
+      "time_thread": 116929.941436,
+      "type": "other"
+    }
+  ],
+  "resources": [
+    {
+      "time_real": "real time"
+    },
+    {
+      "time_thread": "cpu time"
+    },
+    {
+      "mem_alloc": "allocated memory"
+    },
+    {
+      "mem_free": "deallocated memory"
+    }
+  ],
+  "total": {
+    "events": 25000,
+    "label": "RECO",
+    "mem_alloc": 94151738,
+    "mem_free": 93898870,
+    "time_real": 272856.766728,
+    "time_thread": 179211.005373,
+    "type": "Job"
+  }
+}

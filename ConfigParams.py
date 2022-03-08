@@ -73,7 +73,7 @@ options.register ('RecoMethod', ##-- Offline energy reconstruction method
                 VarParsing.VarParsing.varType.string,          
                 "RecoMethod")                                               
 options.register ('Printerval', ##-- How often to print event information  
-                99999, # default value
+                1000, # default value
                 VarParsing.VarParsing.multiplicity.singleton, # singleton or list
                 VarParsing.VarParsing.varType.int,           # string, int, or float
                 "Printerval")   

@@ -13,45 +13,42 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--inputFiles", type = str, required = True, help = "Input json file")
+parser.add_argument("--verbose",action="store_true", help = "extra printouts for humans")
+parser.add_argument("--timeVar", type = str, required = False, default = "time_real", help = "Time variable to get from timing report")
 args = parser.parse_args()
 
+verbose = args.verbose
 inputFiles = args.inputFiles.split(",")
-
+time_var = args.timeVar
 print("Input files:",inputFiles)
 
-# if WithGPURecHits in inputFile
-#  get ecalRecHit@cuda, ecalRecHitGPU, ecalRecHitSoA 
-# if WithoutGPURecHits in inpuFile
-#  get ecalMultiFitUncalibRecHitSoA, ecalRecHit, ecalRecHit@cpu
+LabelsToGetDict = {
+  "WithGPURecHits" : ["ecalRecHit@cuda", "ecalRecHitGPU", "ecalRecHitSoA"], 
+  "WithoutGPURecHits" : ["ecalMultiFitUncalibRecHitSoA", "ecalRecHit", "ecalRecHit@cpu"]
+}
+
+Markdown_Lines = []
+#Markdown_Lines.append("| file   |EcalRawToDigiGPU real time| EcalUncalibRecHitProducerGPU real time|")
+#Markdown_Lines.append("|file|")
+Markdown_Lines.append("|---|---|---|")
 
 for inputFile in inputFiles:
   with open(inputFile, "r") as f:
     print("file:",inputFile)
+    totalPathTime = 0
+    for ConfigType in LabelsToGetDict.keys():
+      if(ConfigType in inputFile):
+        LabelsToGet = LabelsToGetDict[ConfigType]
+        print("module labels to get times for:",LabelsToGet)
     file_info = json.load(f)
     modules = file_info["modules"]
-    #print("modules:",modules)    
-    #print(modules["ecalMultiFitUncalibRecHitGPU"][0])
-    #print(modules["ecalMultiFitUncalibRecHitGPU"]["time_real"])
-    #time_1 = float(modules["ecalMultiFitUncalibRecHitGPU"]["time_real"])
-    
-
-    """
     for module in modules:
-      moduleType = module["type"]
-      print("moduleType:",moduleType)
-      if(moduleType == "ecalMultiFitUncalibRecHitGPU"):
-        time_1 = module["time_real"]
-      elif(moduleType == "EcalRawToDigiGPU"):
-        time_2 = module["time_real"]
-      elif(moduleType == "EcalUncalibRecHitProducerGPU"):
-        time_3 = module["time_real"]
-    print("time_2:",time_2)
-    print("time_3:",time_3)
-    Markdown_Line = "|{inputFile}|{time_2}|{time_3}|".format(inputFile=inputFile, time_2=time_2, time_3=time_3)
-    Markdown_Lines.append(Markdown_Line)
-    f.close()
+      label = module["label"]
+      labelVarName = label.replace("@","at")
+      if(verbose): print("label:",label)
+      if(label in LabelsToGet):
+        exec("%s_time = float(module[time_var])"%(labelVarName))
+        exec("print('%s_time:',%s_time)"%(labelVarName, labelVarName))
+        exec("totalPathTime += %s_time"%(labelVarName))
+  print("TotalPathTime:",totalPathTime)
 
-    """
-
-#Markdown_Table = "\n".join(Markdown_Lines)
-#print(Markdown_Table)

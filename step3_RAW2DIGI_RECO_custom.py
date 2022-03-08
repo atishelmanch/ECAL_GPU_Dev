@@ -175,6 +175,8 @@ if(WithGPURecHits):
 
 # Customisation from command line
 
+process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( options.Printerval ) # Printout run, lumi, event info
+
 #Have logErrorHarvester wait for the same EDProducers to finish as those providing data for the OutputModule
 from FWCore.Modules.logErrorHarvester_cff import customiseLogErrorHarvesterUsingOutputCommands
 process = customiseLogErrorHarvesterUsingOutputCommands(process)
