@@ -39,6 +39,7 @@ cmsenv
 mkdir run
 cd run
 runTheMatrix.py -w upgrade -l 11634.514
+cmsRun step3_RAW2DIGI_RECO_custom.py
 ```
 
 ## Extra commands 
