@@ -31,6 +31,11 @@ source /cvmfs/cms.cern.ch/cmsset_default.sh
 cmsrel <CMSSW_Version>
 ```
 
+Test that git works:
+```
+ssh -T github.com
+```
+
 Running tests: 
 
 ```
@@ -39,8 +44,12 @@ cmsenv
 mkdir run
 cd run
 runTheMatrix.py -w upgrade -l 11634.514
-cmsRun step3_RAW2DIGI_RECO_custom.py
+cmsRun step3_RAW2DIGI_RECO_custom.py userMaxEvents=10000 WithGPURecHits=0
+cmsRun step3_RAW2DIGI_RECO_custom.py userMaxEvents=10000 WithGPURecHits=1
+python GetTimes.py --inputFiles Resources_WithoutGPURecHits_NEvents_10000.json,Resources_WithGPURecHits_NEvents_10000.json
 ```
+
+These final two tests should produce two output files. 
 
 ## Extra commands 
 
