@@ -10,6 +10,12 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 ##-- Options that can be set on the command line 
 options = VarParsing.VarParsing('analysis')
 
+options.register ('WithGPURecHits',
+                  False,
+                  VarParsing.VarParsing.multiplicity.singleton, # singleton or list
+                  VarParsing.VarParsing.varType.bool,           # string, int, or float
+                  "WithGPURecHits")
+
 options.register ('userMaxEvents',
                 -1, # default value
                 VarParsing.VarParsing.multiplicity.singleton, # singleton or list

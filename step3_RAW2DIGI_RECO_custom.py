@@ -22,8 +22,11 @@ process.load('Configuration.StandardSequences.RawToDigi_cff')
 process.load('Configuration.StandardSequences.Reconstruction_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
+# custom aguments 
+from ConfigParams import options 
+
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100),
+    input = cms.untracked.int32(options.userMaxEvents),
     output = cms.optional.untracked.allowed(cms.int32,cms.PSet)
 )
 
@@ -34,7 +37,20 @@ process.FastTimerService.enableDQM = False
 process.FastTimerService.printRunSummary = False
 process.FastTimerService.printJobSummary = True
 process.FastTimerService.writeJSONSummary = True
-process.FastTimerService.jsonFileName = 'resources.json'
+
+WithGPURecHits = options.WithGPURecHits
+
+print("With ECAL GPU rec hits:",WithGPURecHits)
+
+outGPULabelDict = {
+  0 : "WithoutGPURecHits",
+  1 : "WithGPURecHits",
+}
+
+outGPULabel = outGPULabelDict[WithGPURecHits]
+outJsonName = "Resources_%s_NEvents_%s.json"%(outGPULabel, options.userMaxEvents)
+
+process.FastTimerService.jsonFileName = outJsonName
 process.MessageLogger.FastReport = cms.untracked.PSet()
 process.options.wantSummary = True
 
@@ -75,7 +91,7 @@ process.options = cms.untracked.PSet(
 
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
-    annotation = cms.untracked.string('step3 nevts:100'),
+    annotation = cms.untracked.string('step3 nevts:10'),
     name = cms.untracked.string('Applications'),
     version = cms.untracked.string('$Revision: 1.19 $')
 )
@@ -121,14 +137,41 @@ associatePatAlgosToolsTask(process)
 
 # customisation of the process.
 
+process.load( "source_cff" )
+
 # Automatic addition of the customisation function from RecoLocalCalo.Configuration.customizeEcalOnlyForProfiling
-from RecoLocalCalo.Configuration.customizeEcalOnlyForProfiling import customizeEcalOnlyForProfilingGPUOnly 
+#from RecoLocalCalo.Configuration.customizeEcalOnlyForProfiling import customizeEcalOnlyForProfilingGPUOnly 
+from RecoLocalCalo.Configuration.customizeEcalOnlyForProfiling import customizeEcalOnlyForProfiling 
 
 #call to customisation function customizeEcalOnlyForProfilingGPUOnly imported from RecoLocalCalo.Configuration.customizeEcalOnlyForProfiling
-process = customizeEcalOnlyForProfilingGPUOnly(process)
+#process = customizeEcalOnlyForProfilingGPUOnly(process)
+process = customizeEcalOnlyForProfiling(process)
+
+if(WithGPURecHits):
+  print("Setting ECAL Rec hit computation to use GPUs")
+  #process.load("RecoLocalCalo.EcalRecProducers.ecalRecHit_cff")
+  
+  from RecoLocalCalo.EcalRecProducers.ecalRecHitConvertGPU2CPUFormat_cfi import ecalRecHitConvertGPU2CPUFormat as _ecalRecHitFromSoA
+  #from Configuration.ProcessModifiers.gpu_cff import gpu
+
+  # ECAL calibrated rechit reconstruction on CPU
+  from RecoLocalCalo.EcalRecProducers.ecalRecHit_cfi import ecalRecHit as _ecalRecHit
+  from HeterogeneousCore.CUDACore.SwitchProducerCUDA import SwitchProducerCUDA 
+  #ecalRecHit = SwitchProducerCUDA(
+  #    cpu = _ecalRecHit.clone()
+  #)
+
+  gpu.toModify(process.ecalRecHit,
+    cuda = _ecalRecHitFromSoA.clone(
+    recHitsLabelGPUEB = cms.InputTag('ecalRecHitSoA', 'EcalRecHitsEB'),
+       recHitsLabelGPUEE = cms.InputTag('ecalRecHitSoA', 'EcalRecHitsEE')
+    )
+  )
+
+
+#process.ecalRecHit
 
 # End of customisation functions
-
 
 # Customisation from command line
 
