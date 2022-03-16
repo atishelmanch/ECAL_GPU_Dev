@@ -137,7 +137,9 @@ associatePatAlgosToolsTask(process)
 
 # customisation of the process.
 
-process.load( "source_cff" )
+if(options.overrideSource): 
+  print("Overriding input files with source_cff")
+  process.load( "source_cff" )
 
 # Automatic addition of the customisation function from RecoLocalCalo.Configuration.customizeEcalOnlyForProfiling
 #from RecoLocalCalo.Configuration.customizeEcalOnlyForProfiling import customizeEcalOnlyForProfilingGPUOnly 
@@ -155,11 +157,7 @@ if(WithGPURecHits):
   #from Configuration.ProcessModifiers.gpu_cff import gpu
 
   # ECAL calibrated rechit reconstruction on CPU
-  from RecoLocalCalo.EcalRecProducers.ecalRecHit_cfi import ecalRecHit as _ecalRecHit
   from HeterogeneousCore.CUDACore.SwitchProducerCUDA import SwitchProducerCUDA 
-  #ecalRecHit = SwitchProducerCUDA(
-  #    cpu = _ecalRecHit.clone()
-  #)
 
   gpu.toModify(process.ecalRecHit,
     cuda = _ecalRecHitFromSoA.clone(
@@ -168,8 +166,10 @@ if(WithGPURecHits):
     )
   )
 
-
-#process.ecalRecHit
+print("removing crystal recovery to make CPU GPU comparisons more equal")
+process.ecalRecHit.cpu.recoverEBFE = cms.bool(False)
+process.ecalRecHit.cpu.recoverEEFE = cms.bool(False)
+process.ecalRecHit.cpu.killDeadChannels = cms.bool(False)
 
 # End of customisation functions
 

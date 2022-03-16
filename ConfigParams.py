@@ -16,6 +16,12 @@ options.register ('WithGPURecHits',
                   VarParsing.VarParsing.varType.bool,           # string, int, or float
                   "WithGPURecHits")
 
+options.register ('overrideSource',
+                  True,
+                  VarParsing.VarParsing.multiplicity.singleton, # singleton or list
+                  VarParsing.VarParsing.varType.bool,           # string, int, or float
+                  "overrideSource")
+
 options.register ('userMaxEvents',
                 -1, # default value
                 VarParsing.VarParsing.multiplicity.singleton, # singleton or list
