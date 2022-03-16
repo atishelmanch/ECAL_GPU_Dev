@@ -1,10 +1,19 @@
+"""
+16 March 2022
+Abraham Tishelman-Charny 
+
+The purpose of this CMSSW configuration file is to run offline reconstruction with ECAL rec hits produced on CPUs vs. GPUs to determine the differences in run time and energy reconstruction, 
+in order to check if GPUs can be used to speed up reconstruction time, while making sure energy values are not affected.
+"""
+
 # Auto generated configuration file
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
 # with command line options: step3 -s RAW2DIGI:RawToDigi_ecalOnly,RECO:reconstruction_ecalOnly --conditions auto:phase1_2021_realistic --datatier GEN-SIM-RECO,DQMIO -n 10 --eventcontent RECOSIM,DQM --geometry DB:Extended --era Run3 --procModifiers gpu --customise RecoLocalCalo/Configuration/customizeEcalOnlyForProfiling.customizeEcalOnlyForProfilingGPUOnly --filein file:step2.root --fileout file:step3.root
-import FWCore.ParameterSet.Config as cms
 
+import os 
+import FWCore.ParameterSet.Config as cms
 from Configuration.Eras.Era_Run3_cff import Run3
 from Configuration.ProcessModifiers.gpu_cff import gpu
 
@@ -42,13 +51,23 @@ WithGPURecHits = options.WithGPURecHits
 
 print("With ECAL GPU rec hits:",WithGPURecHits)
 
+# Determine names for output files based on configuration parameters 
 outGPULabelDict = {
   0 : "WithoutGPURecHits",
   1 : "WithGPURecHits",
 }
 
+outTimeDirec = "TimeReports"
+outAnalyzerDirec = "AnalyzerOutputs"
+
+# create output directories if they don't already exist 
+if(not os.path.isdir(outTimeDirec)): os.system("mkdir -p %s"%(outTimeDirec))
+if(not os.path.isdir(outAnalyzerDirec)): os.system("mkdir -p %s"%(outAnalyzerDirec))
+
 outGPULabel = outGPULabelDict[WithGPURecHits]
-outJsonName = "Resources_%s_NEvents_%s.json"%(outGPULabel, options.userMaxEvents)
+outJsonName = "%s/Resources_%s_NEvents_%s.json"%(outTimeDirec, outGPULabel, options.userMaxEvents)
+outRecoName = "%s/step3_%s_NEvents_%s.root"%(outAnalyzerDirec, outGPULabel, options.userMaxEvents)
+outDQMName = "%s/step3_inDQM_%s_NEvents_%s.root"%(outAnalyzerDirec, outGPULabel, options.userMaxEvents)
 
 process.FastTimerService.jsonFileName = outJsonName
 process.MessageLogger.FastReport = cms.untracked.PSet()
@@ -59,6 +78,11 @@ process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring('file:step2.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
+
+
+if(options.overrideSource):
+  print("Overriding input files with source_cff")
+  process.load( "source_cff" )
 
 process.options = cms.untracked.PSet(
     FailPath = cms.untracked.vstring(),
@@ -103,7 +127,7 @@ process.RECOSIMoutput = cms.OutputModule("PoolOutputModule",
         dataTier = cms.untracked.string('GEN-SIM-RECO'),
         filterName = cms.untracked.string('')
     ),
-    fileName = cms.untracked.string('file:step3.root'),
+    fileName = cms.untracked.string('file:%s'%(outRecoName)),
     outputCommands = process.RECOSIMEventContent.outputCommands,
     splitLevel = cms.untracked.int32(0)
 )
@@ -113,7 +137,7 @@ process.DQMoutput = cms.OutputModule("DQMRootOutputModule",
         dataTier = cms.untracked.string('DQMIO'),
         filterName = cms.untracked.string('')
     ),
-    fileName = cms.untracked.string('file:step3_inDQM.root'),
+    fileName = cms.untracked.string('file:%s'%(outDQMName)),
     outputCommands = process.DQMEventContent.outputCommands,
     splitLevel = cms.untracked.int32(0)
 )
@@ -137,9 +161,12 @@ associatePatAlgosToolsTask(process)
 
 # customisation of the process.
 
-if(options.overrideSource): 
-  print("Overriding input files with source_cff")
-  process.load( "source_cff" )
+#if(options.overrideSource): 
+#  print("Overriding input files with source_cff")
+#  process.load( "source_cff" )
+
+
+#print("process.RECOSIMoutput_step:",process.RECOSIMoutput_step)
 
 # Automatic addition of the customisation function from RecoLocalCalo.Configuration.customizeEcalOnlyForProfiling
 #from RecoLocalCalo.Configuration.customizeEcalOnlyForProfiling import customizeEcalOnlyForProfilingGPUOnly 
@@ -176,6 +203,8 @@ process.ecalRecHit.cpu.killDeadChannels = cms.bool(False)
 # Customisation from command line
 
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( options.Printerval ) # Printout run, lumi, event info
+
+if(options.ProduceOutputRoot): process.schedule = cms.Schedule(process.raw2digi_step,process.reconstruction_step, process.consume_step, process.RECOSIMoutput_step,process.DQMoutput_step)
 
 #Have logErrorHarvester wait for the same EDProducers to finish as those providing data for the OutputModule
 from FWCore.Modules.logErrorHarvester_cff import customiseLogErrorHarvesterUsingOutputCommands

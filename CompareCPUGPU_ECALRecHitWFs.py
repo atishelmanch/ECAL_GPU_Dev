@@ -5,7 +5,7 @@ Abraham Tishelman-Charny
 The purpose of this python module is to extract times from CMSSW time report jsons.
 
 Example usage:
-python GetTimes.py --inputFiles Resources_WithoutGPURecHits_NEvents_10000.json,Resources_WithGPURecHits_NEvents_10000.json
+python CompareCPUGPU_ECALRecHitWFs.py --inputFiles TimeReports/Resources_WithoutGPURecHits_NEvents_25000.json,TimeReports/Resources_WithGPURecHits_NEvents_25000.json
 """
 
 import json 
@@ -24,7 +24,7 @@ print("Input files:",inputFiles)
 
 LabelsToGetDict = {
   "WithGPURecHits" : ["ecalRecHit@cuda", "ecalRecHitGPU", "ecalRecHitSoA"], 
-  "WithoutGPURecHits" : ["ecalMultiFitUncalibRecHitSoA", "ecalRecHit", "ecalRecHit@cpu"]
+  "WithoutGPURecHits" : ["ecalMultiFitUncalibRecHitSoA", "ecalRecHit", "ecalRecHit@cpu", "ecalMultiFitUncalibRecHit@cuda"]
 }
 
 Markdown_Lines = []
