@@ -13,6 +13,17 @@ mkdir /data/user/$USER
 cd /data/user/$USER 
 ```
 
+Available machines:
+
+```
+gpu-c2a02-37-03.cms
+gpu-c2a02-37-04.cms
+gpu-c2a02-39-01.cms
+gpu-c2a02-39-02.cms
+gpu-c2a02-39-03.cms
+gpu-c2a02-39-04.cms
+```
+
 To use local releases of CMSSW:
 
 ```
